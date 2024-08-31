@@ -1,0 +1,192 @@
+class YuiButton extends HTMLElement {
+    constructor() {
+        super();
+
+        this.$button = this.querySelector(".button");
+        this.text = "";
+        this.mode = "";
+        this.color = "";
+        this.disabled;
+        this.type = "";
+        this.sizes = "";
+        this.loading = "";
+    }
+
+    connectedCallback() {
+        this.text = this.getAttribute("text");
+        this.mode = this.getAttribute("mode") ?? "contained";
+        this.color = this.getAttribute("color") ?? "primary";
+        this.disabled = this.getAttribute("disabled");
+        this.type = this.getAttribute("type") ?? "button";
+        this.size = this.getAttribute("size") ?? "medium";
+        this.loading = this.getAttribute("loading") ?? "";
+
+
+        this.render();
+    }
+
+    render() {
+        this.innerHTML = this.template() + this.templateCss();
+    }
+
+    template() {
+        return `
+        <button 
+        class="button ${this.mode} ${this.color} ${this.size} 
+        ${this.loading ? "loading" : ""} "
+          type="${this.type}"
+          ${this.disabled ? "disabled" : ""}
+        >
+         <slot></slot>
+        </button>
+        `;
+    }
+
+    templateCss() {
+        return `
+        <style>
+        .button {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+  font-weight: var(--btn-font-weight, normal);
+  font-size: var(--btn-font-size, 1rem);
+  padding: var(--btn-padding, 0.5em 1em);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: var(--btn-border-radius, 0.5em);
+  display: flex;
+  align-items: center;
+  display: inline-block;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.contained,
+.outlined {
+  box-shadow: 0em 0.1em 0.3em 0em var(--shadow-color, rgba(0, 0, 0, 0.4));
+  min-height: var(--btn-min-height);
+  min-width: var(--btn-min-width);
+}
+
+.text {
+  outline: none;
+  color: var(--btn-color);
+  padding: var(--btn-text-padding, 0.15em 0.25em);;
+  background: none;
+  --ripple-color: var(--btn-color);
+}
+
+.text:hover {
+  background: rgba(var(--btn-color-rgb), 0.1);
+}
+
+.text:disabled {
+  color: var(--btn-disabled-color-contrast, #909090);
+  cursor: not-allowed;
+}
+
+.contained {
+  outline: none;
+  background: var(--btn-color);
+  color: var(--btn-color-contrast);
+  --ripple-color: var(--btn-color-contrast);
+}
+
+.contained:disabled {
+  color: var(--btn-disabled-color-contrast, #909090);
+  background: var(--btn-disabled-color, #d0d0d0);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.outlined {
+  background: none;
+  outline-width: var(--btn-border-width, 0.1em);
+  outline-style: solid;
+  position: relative;
+  color: var(--btn-color);
+  outline-color: currentColor;
+  --ripple-color: var(--btn-color);
+}
+
+.outlined:disabled {
+  cursor: not-allowed;
+  background: var(--btn-disabled-color, #d0d0d0);
+  color: var(--btn-disabled-color-contrast, #909090);
+  box-shadow: none;
+  opacity: 0.9;
+}
+
+/* Colors */
+
+.primary {
+  --btn-color: var(--primary-color, #9e60f0);
+  --btn-color-rgb: var(--primary-color-rgb, 158, 96, 240);
+  --btn-color-contrast: var(--primary-color-contrast, #ffffff);
+}
+
+.secondary {
+  --btn-color: var(--secondary-color, #05c77d);
+  --btn-color-rgb: var(--secondary-color-rgb, 5, 199, 125);
+  --btn-color-contrast: var(--secondary-color-contrast, #ffffff);
+}
+
+.warning {
+  --btn-color: var(--warning-color, #f0b000);
+  --btn-color-rgb: var(--warning-color-rgb, 240, 176, 0);
+  --btn-color-contrast: var(--warning-color-contrast, #ffffff);
+}
+
+.danger {
+  --btn-color: var(--danger-color, #f01010);
+  --btn-color-rgb: var(--danger-color-rgb, 240, 16, 16);
+  --btn-color-contrast: var(--danger-color-contrast, #ffffff);
+}
+
+.black {
+  --btn-color: var(--color-black, #303030);
+  --btn-color-rgb: var(--color-black-rgb, 48, 48, 48);
+  --btn-color-contrast: var(--color-black-contrast, #ffffff);
+}
+
+.white {
+  --btn-color: var(--color-white, #ffffff);
+  --btn-color-rgb: var(--color-white-rgb, 255, 255, 255);
+  --btn-color-contrast: var(--color-white-contrast, #303030);
+}
+
+/* Animations */
+
+.loading::after {
+  content: '';
+  display: block;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0.5rem;
+  height: 20em;
+  top: 0;
+  width: min(2rem, 30%);
+  background-color: rgba(var(--shadow-color-rgb, 0, 0, 0), 0.4);
+  position: absolute;
+  animation: loading 0.6s infinite;
+  animation-timing-function: linear;
+  z-index: 2;
+}
+
+@keyframes loading {
+  0% {
+    left: -2rem;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+        </style>
+        `;
+    }
+}
+
+customElements.define("yui-button", YuiButton);

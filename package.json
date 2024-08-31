@@ -1,0 +1,19 @@
+{
+  "name": "@yucacodes/ui-wc",
+  "private": false,
+  "type": "module",
+  "files": ["dist"],
+  "main": "/dist/index.js",
+  "exports": {
+      ".": {
+        "import": "./dist/index.js"
+      }
+    },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
